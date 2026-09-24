@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dr. Fareed Tareen, DDS — Intro</title>
+<meta name="description" content="Intro plate for fareedtareen.com — the FT monogram in 3D. Clinical case studies, research, photography and design by Dr. Fareed Tareen, DDS.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Dr. Fareed Tareen, DDS — The FT Mark, in 3D">
+<meta property="og:description" content="The FT monogram in 3D. Entry to the portfolio of Dr. Fareed Tareen, DDS.">
+<meta name="theme-color" content="#000000">
+<link rel="icon" type="image/png" href="assets/ft-logo.png">
+<link rel="apple-touch-icon" href="assets/ft-logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#000; --ink:#fff;
+    --line:rgba(255,255,255,.32); --line-soft:rgba(255,255,255,.13);
+    --grid:rgba(255,255,255,.045); --dim:rgba(255,255,255,.55);
+    --dim2:rgba(255,255,255,.72); --faint:rgba(255,255,255,.40);
+    --mono:"Space Mono",ui-monospace,monospace;
+    --sans:"Manrope","Helvetica Neue",Arial,sans-serif;
+    --ease:cubic-bezier(.16,1,.3,1);
+    --accent:#9aa0a8;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);
+    line-height:1.6;-webkit-font-smoothing:antialiased;overflow:hidden;position:relative;
+    transition:background .5s var(--ease)}
+  a{color:inherit;text-decoration:none}
+  body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+    background-image:linear-gradient(var(--grid) 1px,transparent 1px),
+      linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:40px 40px}
+  canvas{display:block;position:fixed;inset:0;z-index:1}
+
+  #chrome{position:fixed;inset:0;z-index:6;pointer-events:none}
+  #chrome .frame{position:absolute;inset:14px;border:1px solid var(--line-soft)}
+  #chrome .bk{position:absolute;width:20px;height:20px;border:1.5px solid var(--dim2)}
+  #chrome .bk.tl{top:22px;left:22px;border-right:0;border-bottom:0}
+  #chrome .bk.tr{top:22px;right:22px;border-left:0;border-bottom:0}
+  #chrome .bk.bl{bottom:22px;left:22px;border-right:0;border-top:0}
+  #chrome .bk.br{bottom:22px;right:22px;border-left:0;border-top:0}
+
+  header{position:fixed;top:0;left:0;right:0;z-index:8}
+  .nav{display:flex;align-items:center;justify-content:space-between;padding:26px 44px 0}
+  .brand{display:flex;align-items:center;gap:10px}
+  .ftmark{width:26px;height:26px;border:1px solid var(--line);border-radius:50%;overflow:hidden;
+    display:grid;place-items:center;background:#000;transition:transform .5s var(--ease)}
+  .brand:hover .ftmark{transform:rotate(180deg)}
+  .ftmark img{width:100%;height:100%;object-fit:cover}
+  .wordmark{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim2)}
+
+  #caption{position:fixed;left:50%;bottom:12%;transform:translate(-50%,14px);z-index:7;text-align:center;
+    opacity:0;transition:opacity 1s var(--ease),transform 1s var(--ease);pointer-events:none}
+  #caption.on{opacity:1;transform:translate(-50%,0)}
+  #caption .tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.32em;color:var(--dim);text-transform:uppercase;min-height:1.6em}
+  #caption .cta{display:inline-block;margin-top:16px;font-family:var(--mono);font-size:10px;letter-spacing:.26em;
+    text-transform:uppercase;border:1px solid var(--line);padding:12px 26px;color:var(--ink);
+    transition:background .35s var(--ease),color .35s;pointer-events:auto}
+  #caption .cta:hover{background:var(--ink);color:var(--bg)}
+  .caret{display:inline-block;width:.55em;height:1.05em;background:var(--accent);vertical-align:text-bottom;
+    animation:blink 1s steps(1) infinite}
+  @keyframes blink{50%{opacity:0}}
+
+  #err{position:fixed;left:10px;bottom:10px;z-index:30;color:#ff7a6b;font:10px var(--mono);
+    white-space:pre-wrap;display:none;max-width:70vw}
+</style>
+</head>
+<body>
+
+<div id="chrome">
+  <div class="frame"></div>
+  <i class="bk tl"></i><i class="bk tr"></i><i class="bk bl"></i><i class="bk br"></i>
+</div>
+
+<header>
+  <div class="nav">
+    <a class="brand" href="https://fareedtareen.com">
+      <span class="ftmark"><img src="assets/ft-logo.png" alt="ft"></span>
+      <span class="wordmark">Dr. Fareed Tareen, DDS</span>
+    </a>
+  </div>
+</header>
+
+<div id="caption">
+  <div class="tag" id="tagline" data-type="DR. FAREED TAREEN, DDS"></div>
+  <br><a class="cta" href="https://fareedtareen.com">Enter Portfolio →</a>
+</div>
+
+<div id="err"></div>
+
+<script type="importmap">
+{ "imports": {
+  "three": "./vendor/three/0.160.0/build/three.module.js",
+  "three/addons/": "./vendor/three/0.160.0/examples/jsm/"
+} }
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { STLLoader } from 'three/addons/loaders/STLLoader.js';
+
+const params = new URLSearchParams(location.search);
+const errBox = document.getElementById('err');
+function fatal(msg){ errBox.style.display='block'; errBox.textContent += msg + '\n'; }
+addEventListener('error', e => fatal('JS: ' + e.message));
+
+let themeWhite = params.get('theme') === 'white';
+const BG_DARK = 0x000000, BG_WHITE = 0xf4f4f2;
+
+/* ============================ renderer / scene ============================ */
+const renderer = new THREE.WebGLRenderer({ antialias:true });
+renderer.setSize(innerWidth, innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.1;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+document.body.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(themeWhite ? BG_WHITE : BG_DARK);
+scene.fog = new THREE.Fog(themeWhite ? BG_WHITE : BG_DARK, 90, 240);
+
+const camera = new THREE.PerspectiveCamera(30, innerWidth/innerHeight, 0.1, 600);
+camera.position.set(0, 12, 158);
+camera.lookAt(0, 0, 0);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.06;
+controls.minDistance = 110;
+controls.maxDistance = 220;
+controls.enablePan = false;
+controls.minPolarAngle = Math.PI * 0.44;
+controls.maxPolarAngle = Math.PI * 0.56;
+controls.minAzimuthAngle = -0.45;
+controls.maxAzimuthAngle =  0.45;
+controls.target.set(0, 0, 0);
+
+/* -------- procedural studio environment -------- */
+function studioEnv(){
+  const env = new THREE.Scene();
+  env.background = new THREE.Color(0x000000);
+  const softTex = (w,h,horiz) => {
+    const c = document.createElement('canvas'); c.width=w; c.height=h;
+    const x = c.getContext('2d');
+    const g = horiz ? x.createLinearGradient(0,0,w,0) : x.createLinearGradient(0,0,0,h);
+    g.addColorStop(0,'#000'); g.addColorStop(.22,'#888'); g.addColorStop(.5,'#fff');
+    g.addColorStop(.78,'#888'); g.addColorStop(1,'#000');
+    x.fillStyle=g; x.fillRect(0,0,w,h);
+    const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
+  };
+  const card = (w,h,color,int,pos,rotY=0,rotX=0,tex=null) => {
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(w,h),
+      new THREE.MeshBasicMaterial({ color:new THREE.Color(color).multiplyScalar(int), map:tex, side:THREE.DoubleSide }));
+    m.position.set(...pos); m.rotation.y=rotY; m.rotation.x=rotX; env.add(m);
+  };
+  const stripV = softTex(64,512,true), stripH = softTex(512,64,false);
+  card(22,10,0xffffff,5.0,[0,16,0],0,Math.PI/2,stripH);
+  card(3,16,0xffffff,3.6,[-16,4,-4],Math.PI/2.6,0,stripV);
+  card(3,16,0xffffff,2.8,[16,3,-3],-Math.PI/2.6,0,stripV);
+  card(14,6,0xffffff,1.2,[0,3,-18],0,0,stripH);
+  card(8,3,0xffffff,0.8,[8,2,16],Math.PI,0,stripH);
+  return env;
+}
+const pmrem = new THREE.PMREMGenerator(renderer);
+scene.environment = pmrem.fromScene(studioEnv(), 0.04).texture;
+
+/* lights */
+const key = new THREE.DirectionalLight(0xffffff, 2.2);
+key.position.set(20, 34, 16);
+key.castShadow = true;
+key.shadow.mapSize.set(2048, 2048);
+key.shadow.camera.left=-60; key.shadow.camera.right=60;
+key.shadow.camera.top=60; key.shadow.camera.bottom=-60;
+key.shadow.bias = -0.0005;
+scene.add(key);
+const rim = new THREE.DirectionalLight(0xffffff, 1.2); rim.position.set(-24, 10, -22); scene.add(rim);
+scene.add(new THREE.AmbientLight(0xffffff, 0.1));
+
+/* floor + blueprint grid */
+const floor = new THREE.Mesh(
+  new THREE.CircleGeometry(140, 64),
+  new THREE.MeshStandardMaterial({ color:0x0a0a0c, roughness:0.9, metalness:0.05 })
+);
+floor.rotation.x = -Math.PI/2; floor.position.y = -36.6; floor.receiveShadow = true;
+scene.add(floor);
+const grid = new THREE.GridHelper(280, 70, 0x3a3f46, 0x2a2e34);
+grid.material.transparent = true; grid.material.opacity = themeWhite ? 0.10 : 0.16;
+grid.position.y = -36.5;
+scene.add(grid);
+
+/* ============================ materials ============================ */
+const MAT = {
+  base: new THREE.MeshPhysicalMaterial({
+    color:0xD6D9DD, metalness:0.45, roughness:0.36,
+    clearcoat:0.6, clearcoatRoughness:0.3
+  }),
+  white: new THREE.MeshPhysicalMaterial({
+    color:0xF2F3F5, metalness:0.25, roughness:0.30,
+    clearcoat:0.7, clearcoatRoughness:0.2
+  })
+};
+
+/* ============================ build the mark ============================ */
+const mark = new THREE.Group();
+const spinner = new THREE.Group();
+mark.add(spinner);
+scene.add(mark);
+
+const glow = (m)=>{ m.castShadow = true; m.receiveShadow = false; return m; };
+
+let baseMesh = null, lettersMesh = null, baseMat = null, chromeMat = null;
+let assemblyStart = performance.now();
+
+new STLLoader().load('assets/ft_logo_centered.stl', (geom) => {
+  geom.computeBoundingBox();
+  const bb = geom.boundingBox;
+  const cx = (bb.min.x + bb.max.x)/2, cy = (bb.min.y + bb.max.y)/2;
+  geom.translate(-cx, -cy, -bb.min.z);
+  geom.computeVertexNormals();
+
+  const baseGeom = geom.clone(); baseGeom.clearGroups();
+  const lettGeom = geom.clone(); lettGeom.clearGroups();
+  splitSlab(baseGeom, 1.1, false);
+  splitSlab(lettGeom, 1.1, true);
+
+  baseMat = MAT.base.clone(); chromeMat = MAT.white.clone();
+  baseMesh = glow(new THREE.Mesh(baseGeom, baseMat));
+  lettersMesh = glow(new THREE.Mesh(lettGeom, chromeMat));
+  spinner.add(baseMesh, lettersMesh);
+
+  introReveal();
+}, undefined, () => {
+  fatal('Could not load assets/ft_logo_centered.stl');
+});
+
+/* keep only triangles whose centroid z satisfies the predicate */
+function splitSlab(g, zCut, keepAbove){
+  const pos = g.attributes.position;
+  const idx = g.index ? g.index.array : null;
+  const triCount = idx ? idx.length/3 : pos.count/3;
+  const keep = [];
+  for (let t=0; t<triCount; t++){
+    let zc = 0;
+    for (let k=0;k<3;k++){
+      const vi = idx ? idx[t*3+k] : t*3+k;
+      zc += pos.getZ(vi);
+    }
+    zc /= 3;
+    if (keepAbove ? zc >= zCut : zc < zCut) keep.push(t);
+  }
+  const n = keep.length;
+  const P = new Float32Array(n*9), N = new Float32Array(n*9);
+  const srcP = pos.array, srcN = g.attributes.normal.array;
+  for (let i=0;i<n;i++){
+    const t = keep[i];
+    for (let k=0;k<3;k++){
+      const vi = idx ? idx[t*3+k] : t*3+k;
+      P.set([srcP[vi*3], srcP[vi*3+1], srcP[vi*3+2]], (i*3+k)*3);
+      N.set([srcN[vi*3], srcN[vi*3+1], srcN[vi*3+2]], (i*3+k)*3);
+    }
+  }
+  g.setAttribute('position', new THREE.BufferAttribute(P,3));
+  g.setAttribute('normal', new THREE.BufferAttribute(N,3));
+  g.setIndex(null);
+}
+
+/* ============================ intro / choreography ============================ */
+const timers = [];
+const later = (fn,ms)=> timers.push(setTimeout(fn,ms));
+const smoothstep = (a,b,x)=>{ const t=Math.min(1,Math.max(0,(x-a)/(b-a))); return t*t*(3-2*t); };
+
+function introReveal(){
+  assemblyStart = performance.now() + 600;
+  later(()=>{ document.getElementById('caption').classList.add('on'); typeIn(document.getElementById('tagline'), 26); }, 2600);
+}
+
+function applyAssembly(t){
+  const rise = smoothstep(0.0, 1.5, t);
+  const l = smoothstep(0.42, 1.8, t);
+  if (baseMesh){ baseMesh.position.z = -50 * (1-rise); baseMesh.scale.z = 0.4 + 0.6*rise; }
+  if (lettersMesh){ lettersMesh.position.z = 3.4 + 20 * (1-l); lettersMesh.scale.z = 0.4 + 0.6*l; }
+  if (chromeMat) chromeMat.roughness = 0.50 - 0.36*smoothstep(1.2, 2.6, t);
+  if (baseMat)   baseMat.roughness   = 0.60 - 0.24*smoothstep(0.4, 1.8, t);
+  const settled = smoothstep(2.0, 2.8, t);
+  spinner.rotation.y = (1-settled) * 0.55;
+  return settled;
+}
+
+function typeIn(el, speed){
+  const text = el.dataset.type;
+  el.textContent = '';
+  const caret = document.createElement('span'); caret.className = 'caret';
+  el.appendChild(caret);
+  let i = 0;
+  (function step(){
+    if (i < text.length){
+      caret.before(document.createTextNode(text[i++]));
+      timers.push(setTimeout(step, speed + Math.random()*24));
+    } else caret.remove();
+  })();
+}
+
+/* ============================ theme ============================ */
+function setTheme(white){
+  themeWhite = white;
+  document.body.classList.toggle('light', white);
+  scene.background.set(white ? BG_WHITE : BG_DARK);
+  scene.fog.color.set(white ? BG_WHITE : BG_DARK);
+  floor.material.color.set(white ? 0xe8e8e4 : 0x0a0a0c);
+  grid.material.opacity = white ? 0.10 : 0.16;
+}
+setTheme(themeWhite);
+
+/* ============================ loop ============================ */
+const clock = new THREE.Clock();
+let spinning = params.get('spin') !== '0';
+function tick(){
+  requestAnimationFrame(tick);
+  const dt = Math.min(clock.getDelta(), 0.05);
+  const t = (performance.now() - assemblyStart) / 1000;
+  const settled = applyAssembly(t);
+  if (spinning && settled > 0.5) spinner.rotation.y += dt * 0.35;
+  controls.update();
+  renderer.render(scene, camera);
+}
+tick();
+
+addEventListener('resize', ()=>{
+  camera.aspect = innerWidth/innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
+</script>
+</body>
+</html>
